@@ -1,1 +1,103 @@
 @import "tailwindcss";
+
+/* Enable dark: utilities using the .dark class */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light mode: default theme */
+:root {
+  color-scheme: light;
+
+  --page-bg: #ffffff;
+  --text-primary: #171717;
+  --text-secondary: #525252;
+  --surface-bg: #fafafa;
+  --border-color: #e5e5e5;
+
+  --accent: #5b4be7;
+  --accent-hover: #4938d0;
+}
+
+/* Dark mode */
+html.dark {
+  color-scheme: dark;
+
+  --page-bg: #111014;
+  --text-primary: #f5f3f7;
+  --text-secondary: #b8b2c2;
+  --surface-bg: #1b1920;
+  --border-color: #37313f;
+
+  --accent: #a99bff;
+  --accent-hover: #c1b7ff;
+}
+
+/* Make the variables available as Tailwind utilities */
+@theme inline {
+  --color-page-bg: var(--page-bg);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-surface-bg: var(--surface-bg);
+  --color-border-color: var(--border-color);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+}
+
+/* Default page colors */
+@layer base {
+  html {
+    background-color: var(--page-bg);
+    color: var(--text-primary);
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  body {
+    background-color: var(--page-bg);
+    color: var(--text-primary);
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  p,
+  li {
+    color: inherit;
+  }
+
+  a {
+    transition: color 0.2s ease;
+  }
+}
+
+/* Reusable theme classes */
+@layer components {
+  .theme-page {
+    background-color: var(--page-bg);
+    color: var(--text-primary);
+  }
+
+  .theme-surface {
+    background-color: var(--surface-bg);
+  }
+
+  .theme-text {
+    color: var(--text-primary);
+  }
+
+  .theme-text-secondary {
+    color: var(--text-secondary);
+  }
+
+  .theme-border {
+    border-color: var(--border-color);
+  }
+
+  .theme-accent {
+    color: var(--accent);
+  }
+
+  .theme-accent-bg {
+    background-color: var(--accent);
+  }
+}

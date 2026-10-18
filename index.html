@@ -3,21 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="./src/output.css" rel="stylesheet" />
-    <title>Abhishek T. Dubey — SEO Executive</title>
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content="Bijay Mohanty — Software Engineer and Java Backend Developer." />
+    <title>Bijay Mohanty — Java Backend Developer</title>
+
+    <!-- Apply saved theme BEFORE first paint (prevents a white flash in dark mode) -->
+    <script>
+      (function () {
+        var theme = null;
+        try { theme = localStorage.getItem("theme"); } catch (e) {}
+        if (!theme) {
+          theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.classList.toggle("dark", theme === "dark");
+      })();
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
+        darkMode: "class",
         theme: {
           extend: {
             colors: {
-              "deep-blue": "#0E21A0",
-              purple: "#4D2DB7",
-              lavender: "#9D44C0",
-              pink: "#F075AA",
-              bg: "#07051c",
-              card: "#0d0a2a",
-              card2: "#130f38",
+              // Every color reads a CSS variable, so one class swap re-themes the whole page.
+              page: "rgb(var(--c-page) / <alpha-value>)",
+              accent: "rgb(var(--c-accent) / <alpha-value>)",
+              accent2: "rgb(var(--c-accent2) / <alpha-value>)",
+              ink: "rgb(var(--c-ink) / <alpha-value>)",
+              muted: "rgb(var(--c-muted) / <alpha-value>)",
+              line: "rgb(var(--c-line) / <alpha-value>)",
+              soft: "rgb(var(--c-soft) / <alpha-value>)",
+              footer: "rgb(var(--c-footer) / <alpha-value>)",
             },
             fontFamily: {
               mono: ['"Fira Code"', "monospace"],
@@ -28,1031 +45,594 @@
         },
       };
     </script>
+
     <link
       href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Fira+Code:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
+
     <style>
-      /* Grid texture — one unavoidable pseudo-element */
+      /* ---------- Theme tokens (space-separated RGB channels) ---------- */
+      :root {
+        color-scheme: light;
+        --c-page: 255 255 255;
+        --c-ink: 23 23 23;
+        --c-muted: 102 102 102;
+        --c-line: 232 229 242;
+        --c-soft: 247 246 252;
+        --c-accent: 91 75 231;
+        --c-accent2: 139 92 246;
+        --c-footer: 23 23 23;
+        --grid-line: rgba(91, 75, 231, 0.045);
+        --skill-bg: #ffffff;
+        --skill-border: #e5e1f3;
+        --skill-text: #45405e;
+        --card-hover: #b7adf7;
+        --dashed: #e1ddec;
+        --number-faint: rgba(91, 75, 231, 0.18);
+        --glow-1: rgba(139, 92, 246, 0.28);
+        --glow-2: rgba(167, 139, 250, 0.18);
+        --glow-3: rgba(196, 181, 253, 0.08);
+      }
+
+      html.dark {
+        color-scheme: dark;
+        --c-page: 17 16 20;
+        --c-ink: 245 243 247;
+        --c-muted: 184 178 194;
+        --c-line: 55 49 63;
+        --c-soft: 27 25 32;
+        --c-accent: 169 155 255;
+        --c-accent2: 167 139 250;
+        --c-footer: 10 9 12;
+        --grid-line: rgba(169, 155, 255, 0.05);
+        --skill-bg: #14121a;
+        --skill-border: #3a3445;
+        --skill-text: #d6d0e2;
+        --card-hover: #7c6df0;
+        --dashed: #3a3445;
+        --number-faint: rgba(169, 155, 255, 0.22);
+        --glow-1: rgba(139, 92, 246, 0.22);
+        --glow-2: rgba(139, 92, 246, 0.12);
+        --glow-3: rgba(139, 92, 246, 0.05);
+      }
+
+      html {
+        scroll-padding-top: 90px;
+        background-color: rgb(var(--c-page));
+      }
+
+      body {
+        background-color: rgb(var(--c-page));
+        color: rgb(var(--c-ink));
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
       body::before {
         content: "";
         position: fixed;
         inset: 0;
         background-image:
-          linear-gradient(rgba(157, 68, 192, 0.1) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(157, 68, 192, 0.1) 1px, transparent 1px);
+          linear-gradient(var(--grid-line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
         background-size: 48px 48px;
         pointer-events: none;
         z-index: 0;
       }
-      /* Fade-up animation */
+
       @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(24px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(24px); }
+        to { opacity: 1; transform: translateY(0); }
       }
-      .fade-up {
-        animation: fadeUp 0.7s ease both;
-      }
-      .delay-1 {
-        animation-delay: 0.12s;
-      }
-      .delay-2 {
-        animation-delay: 0.26s;
-      }
-      .delay-3 {
-        animation-delay: 0.4s;
-      }
-      /* Section divider line */
+      .fade-up { animation: fadeUp 0.7s ease both; }
+      .delay-1 { animation-delay: 0.12s; }
+      .delay-2 { animation-delay: 0.26s; }
+      .delay-3 { animation-delay: 0.4s; }
+
       .sec-label::after {
         content: "";
         display: inline-block;
         flex: 1;
         height: 1px;
-        background: rgba(157, 68, 192, 0.22);
+        background: rgb(var(--c-accent) / 0.22);
+      }
+
+      .glow-main {
+        background: radial-gradient(circle, var(--glow-1) 0%, var(--glow-2) 35%, var(--glow-3) 60%, transparent 75%);
+      }
+      .glow-small {
+        background: radial-gradient(circle, rgb(var(--c-accent) / 0.09), transparent 70%);
+      }
+
+      .skill {
+        font-size: 11px;
+        padding: 6px 10px;
+        background: var(--skill-bg);
+        border: 1px solid var(--skill-border);
+        border-radius: 3px;
+        color: var(--skill-text);
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+      }
+
+      .project-card {
+        background: rgb(var(--c-soft));
+        border: 1px solid rgb(var(--c-line));
+        border-radius: 14px;
+        padding: 26px;
+        transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.3s ease;
+      }
+      .project-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--card-hover);
+      }
+
+      .project-number {
+        font-family: "Instrument Serif", serif;
+        font-size: 58px;
+        line-height: 1;
+        color: var(--number-faint);
+        margin-bottom: 24px;
+      }
+
+      .project-type {
+        font-size: 10px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: rgb(var(--c-accent));
+        margin-bottom: 10px;
+      }
+
+      .project-card ul {
+        list-style: none;
+        font-size: 11px;
+        line-height: 1.9;
+        color: rgb(var(--c-muted));
+      }
+      .project-card li {
+        padding: 8px 0;
+        border-top: 1px dashed var(--dashed);
+      }
+      .project-card li::before {
+        content: "→";
+        color: rgb(var(--c-accent));
+        margin-right: 8px;
+      }
+
+      .contact-link {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding: 24px 0;
+        border-bottom: 1px solid rgb(var(--c-line));
+        text-decoration: none;
+        color: rgb(var(--c-ink));
+      }
+      .contact-link span {
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgb(var(--c-muted));
+        width: 80px;
+        flex-shrink: 0;
+      }
+      .contact-link strong {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(17px, 2vw, 23px);
+        font-weight: 400;
+      }
+      .contact-link:hover strong { color: rgb(var(--c-accent)); }
+
+      @media (max-width: 640px) {
+        .contact-link { gap: 12px; align-items: flex-start; flex-direction: column; }
+        .contact-link span { width: auto; }
       }
     </style>
   </head>
 
-  <body class="bg-bg text-[#f0ecff] font-mono overflow-x-hidden">
-    <!-- ───────────── NAV ───────────── -->
+  <body class="bg-page text-ink font-mono overflow-x-hidden">
+    <!-- Navigation -->
     <nav
-      class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-12 py-4 bg-[rgba(7,5,28,0.85)] backdrop-blur-lg border-b border-[rgba(157,68,192,0.22)]"
+      class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 bg-page/90 backdrop-blur-lg border-b border-line transition-colors duration-300"
     >
-      <span
-        class="font-sans font-extrabold text-[13px] tracking-[3px] uppercase text-pink"
-        >Abhishek</span
-      >
-      <ul class="hidden md:flex gap-8 list-none">
-        <li>
-          <a
-            href="#about"
-            class="font-mono text-[11px] tracking-widest uppercase text-[#f0ecff]/40 hover:text-pink hover:opacity-100 transition-colors no-underline"
-            >About</a
-          >
-        </li>
-        <li>
-          <a
-            href="#skills"
-            class="font-mono text-[11px] tracking-widest uppercase text-[#f0ecff]/40 hover:text-pink hover:opacity-100 transition-colors no-underline"
-            >Skills</a
-          >
-        </li>
-        <li>
-          <a
-            href="#experience"
-            class="font-mono text-[11px] tracking-widest uppercase text-[#f0ecff]/40 hover:text-pink hover:opacity-100 transition-colors no-underline"
-            >Experience</a
-          >
-        </li>
-        <li>
-          <a
-            href="#projects"
-            class="font-mono text-[11px] tracking-widest uppercase text-[#f0ecff]/40 hover:text-pink hover:opacity-100 transition-colors no-underline"
-            >Projects</a
-          >
-        </li>
-        <li>
-          <a
-            href="#contact"
-            class="font-mono text-[11px] tracking-widest uppercase text-[#f0ecff]/40 hover:text-pink hover:opacity-100 transition-colors no-underline"
-            >Contact</a
-          >
-        </li>
+      <a href="#home" class="font-extrabold text-[20px] tracking-[1px] uppercase text-accent no-underline">
+        Bijay Mohanty
+      </a>
+
+      <ul class="hidden md:flex gap-7 list-none">
+        <li><a href="#about" class="text-[11px] tracking-widest uppercase text-muted hover:text-accent no-underline">About</a></li>
+        <li><a href="#skills" class="text-[11px] tracking-widest uppercase text-muted hover:text-accent no-underline">Skills</a></li>
+        <li><a href="#experience" class="text-[11px] tracking-widest uppercase text-muted hover:text-accent no-underline">Experience</a></li>
+        <li><a href="#projects" class="text-[11px] tracking-widest uppercase text-muted hover:text-accent no-underline">Projects</a></li>
+        <li><a href="#education" class="text-[11px] tracking-widest uppercase text-muted hover:text-accent no-underline">Education</a></li>
+        <li><a href="#contact" class="text-[11px] tracking-widest uppercase text-muted hover:text-accent no-underline">Contact</a></li>
       </ul>
+
+      <button
+        id="theme-toggle"
+        type="button"
+        aria-label="Switch to dark mode"
+        title="Toggle theme"
+        class="ml-4 inline-flex items-center justify-center w-10 h-10 rounded-full border border-line bg-page text-ink hover:bg-soft hover:text-accent transition-colors"
+      >
+        <svg
+          id="theme-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="19"
+          height="19"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></svg>
+      </button>
     </nav>
 
-    <!-- ───────────── HERO ───────────── -->
-    <section
-      class="relative min-h-screen flex flex-col justify-end px-12 pb-20 pt-28"
-    >
-      <!-- Glow orbs -->
-      <div
-        class="absolute right-[8%] top-[25%] w-80 h-80 rounded-full pointer-events-none"
-        style="
-          background: radial-gradient(
-            circle,
-            rgba(77, 45, 183, 0.22) 0%,
-            transparent 70%
-          );
-        "
-      ></div>
-      <div
-        class="absolute right-[18%] top-[50%] w-48 h-48 rounded-full pointer-events-none"
-        style="
-          background: radial-gradient(
-            circle,
-            rgba(240, 117, 170, 0.12) 0%,
-            transparent 70%
-          );
-        "
-      ></div>
+    <main id="home">
+      <!-- Hero -->
+      <section class="relative min-h-[90vh] flex flex-col justify-end px-6 md:px-12 pb-20 pt-32">
+        <div class="glow-main absolute right-[5%] top-[15%] w-[500px] h-[500px] rounded-full pointer-events-none blur-2xl"></div>
+        <div class="glow-small absolute right-[18%] top-[50%] w-48 h-48 rounded-full pointer-events-none"></div>
 
-      <p
-        class="fade-up font-mono text-[11px] tracking-[3px] uppercase text-pink mb-5"
-      >
-        Based in Thane, Maharashtra · Open to Opportunities
-      </p>
+        <p class="fade-up text-[11px] tracking-[3px] uppercase text-accent mb-5">
+          Software Engineer · Java Backend Developer
+        </p>
 
-      <h1
-        class="fade-up delay-1 font-serif leading-[0.92] text-[#f0ecff] mb-7"
-        style="font-size: clamp(56px, 8vw, 118px)"
-      >
-        Abhishek<br />
-        <em class="italic text-lavender">T. Dubey</em>
-      </h1>
+        <h1 class="fade-up delay-1 font-serif leading-[1.10] mb-7" style="font-size: clamp(56px, 8vw, 118px)">
+          Bijay<br />
+          <em class="italic text-accent">Mohanty</em>
+        </h1>
 
-      <p
-        class="fade-up delay-2 font-sans font-medium text-[13px] tracking-wide text-[#f0ecff]/50 max-w-xl leading-relaxed mb-12"
-      >
-        Helping businesses grow organic traffic through structured keyword
-        research, technical SEO improvements, and search-intent driven content
-        strategies.
-      </p>
+        <p class="fade-up delay-2 font-sans font-medium text-sm tracking-wide text-muted max-w-2xl leading-relaxed mb-10">
+          Aspiring Software Engineer skilled in Java, Spring Boot, REST APIs,
+          and SQL, with hands-on experience developing backend projects,
+          database integration, and API testing. Familiar with Android and Unity
+          game development.
+        </p>
 
-      <div class="fade-up delay-3 flex flex-wrap gap-3">
-        <span
-          class="font-mono text-[10px] tracking-widest uppercase px-4 py-2 border border-pink/30 text-pink rounded-sm hover:bg-pink hover:text-bg transition-colors cursor-default"
-          >Technical SEO</span
-        >
-        <span
-          class="font-mono text-[10px] tracking-widest uppercase px-4 py-2 border border-pink/30 text-pink rounded-sm hover:bg-pink hover:text-bg transition-colors cursor-default"
-          >Keyword Research</span
-        >
-        <span
-          class="font-mono text-[10px] tracking-widest uppercase px-4 py-2 border border-pink/30 text-pink rounded-sm hover:bg-pink hover:text-bg transition-colors cursor-default"
-          >Data-Driven Strategy</span
-        >
-        <span
-          class="font-mono text-[10px] tracking-widest uppercase px-4 py-2 border border-pink/30 text-pink rounded-sm hover:bg-pink hover:text-bg transition-colors cursor-default"
-          >AI-Assisted Optimization</span
-        >
-        <span
-          class="font-mono text-[10px] tracking-widest uppercase px-4 py-2 border border-pink/30 text-pink rounded-sm hover:bg-pink hover:text-bg transition-colors cursor-default"
-          >n8n Automation</span
-        >
-      </div>
-
-      <!-- Ghost counter -->
-      <!-- <span
-        class="absolute right-12 bottom-16 font-serif text-[130px] leading-none text-purple/10 select-none pointer-events-none"
-        >300%</span
-      > -->
-    </section>
-
-    <!-- ───────────── ABOUT ───────────── -->
-    <section id="about" class="relative z-10 px-12 py-24">
-      <p
-        class="sec-label flex items-center gap-4 font-mono text-[20px] text-opacity-70 tracking-[3px] uppercase text-lavender mb-12"
-      >
-        01 — About
-      </p>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-        <!-- Left -->
-        <div>
-          <h2
-            class="font-serif leading-tight mb-12"
-            style="font-size: clamp(36px, 5vw, 64px)"
-          >
-            Where &amp;<br /><em class="italic text-lavender">What</em>
-          </h2>
-          <p class="font-mono text-[13px] leading-loose text-[#f0ecff]/50">
-            I'm Abhishek Dubey, an SEO professional based in Thane, Maharashtra.
-            I work on improving search visibility, website structure, and
-            organic traffic through practical SEO strategies that combine
-            keyword research, technical optimization, and content planning.
-            <br /><br />
-            I have worked on multiple SEO projects across agencies and startups
-            where my strategies contributed to 300%+ collective organic traffic
-            growth through keyword gap analysis, site architecture planning, and
-            data-driven content strategies.
-            <br /><br />
-            I also build small automation systems using n8n to reduce repetitive
-            SEO tasks like ranking checks and indexing audits.
-            <br /><br />
-            Tools I use regularly: Google Analytics · Search Console · Semrush ·
-            Surfer SEO · Screaming Frog · WordPress.
-          </p>
+        <div class="fade-up delay-3 flex flex-wrap gap-3">
+          <span class="text-[10px] tracking-widest uppercase px-4 py-2 border border-accent/30 text-accent rounded-sm">Java</span>
+          <span class="text-[10px] tracking-widest uppercase px-4 py-2 border border-accent/30 text-accent rounded-sm">Spring Boot</span>
+          <span class="text-[10px] tracking-widest uppercase px-4 py-2 border border-accent/30 text-accent rounded-sm">REST APIs</span>
+          <span class="text-[10px] tracking-widest uppercase px-4 py-2 border border-accent/30 text-accent rounded-sm">SQL / MySQL</span>
+          <span class="text-[10px] tracking-widest uppercase px-4 py-2 border border-accent/30 text-accent rounded-sm">Kotlin / Android</span>
         </div>
 
-        <!-- Right -->
-        <div>
-          <!-- Stats -->
-          <div class="border-l-2 border-purple pl-6 mb-8">
-            <div class="font-serif text-[52px] text-lavender leading-none">
-              300%+
-            </div>
-            <div
-              class="font-mono text-[11px] tracking-widest uppercase text-[#f0ecff]/50 mt-1"
-            >
-              Collective organic traffic growth
-            </div>
+        <div class="mt-10 flex flex-wrap gap-5 text-sm text-muted">
+          <a class="hover:text-accent" href="mailto:bijaymohanty165@gmail.com">bijaymohanty165@gmail.com ↗</a>
+          <a class="hover:text-accent" href="tel:8118035765">8118035765 ↗</a>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section id="about" class="relative z-10 px-6 md:px-12 py-20 md:py-24">
+        <p class="sec-label flex items-center gap-4 text-sm text-accent tracking-[3px] uppercase mb-12">01 — About</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
+          <div>
+            <h2 class="font-serif leading-tight mb-8" style="font-size: clamp(36px, 5vw, 64px)">
+              Building<br />
+              <em class="italic text-accent">Backend Systems</em>
+            </h2>
+
+            <p class="text-[13px] leading-loose text-muted">
+              I am an aspiring Software Engineer focused on Java backend
+              development. My project work includes building REST APIs,
+              implementing create, read, update, and delete operations,
+              connecting applications to MySQL databases, and organizing
+              application logic into controller and service layers.
+            </p>
+
+            <p class="text-[13px] leading-loose text-muted mt-5">
+              I have also worked with Kotlin and Android UI components, device
+              storage access, and image metadata. My internship experience
+              includes contributing to game development tasks using Unity
+              Engine.
+            </p>
           </div>
-          <div class="border-l-2 border-purple pl-6 mb-10">
-            <div class="font-serif text-[52px] text-lavender leading-none">
-              100
+
+          <div>
+            <div class="border-l-2 border-accent pl-6 mb-8">
+              <div class="font-serif text-4xl text-accent leading-none">03</div>
+              <div class="text-[11px] tracking-widest uppercase text-muted mt-2">Featured projects</div>
             </div>
-            <div
-              class="font-mono text-[11px] tracking-widest uppercase text-[#f0ecff]/50 mt-1"
-            >
-              PageSpeed Insights score achieved
+
+            <div class="border-l-2 border-accent pl-6 mb-10">
+              <div class="font-serif text-4xl text-accent leading-none">Java</div>
+              <div class="text-[11px] tracking-widest uppercase text-muted mt-2">Primary backend language</div>
+            </div>
+
+            <p class="sec-label flex items-center gap-4 text-sm tracking-[3px] uppercase text-accent mb-5">Core Focus</p>
+
+            <ul class="list-none">
+              <li class="flex gap-4 items-start text-sm text-muted py-3 border-b border-line">
+                <span class="font-serif text-xl text-accent w-7 leading-none">1</span>
+                Design and build REST API endpoints
+              </li>
+              <li class="flex gap-4 items-start text-sm text-muted py-3 border-b border-line">
+                <span class="font-serif text-xl text-accent w-7 leading-none">2</span>
+                Persist and retrieve data using SQL and MySQL
+              </li>
+              <li class="flex gap-4 items-start text-sm text-muted py-3 border-b border-line">
+                <span class="font-serif text-xl text-accent w-7 leading-none">3</span>
+                Separate request handling and business logic
+              </li>
+              <li class="flex gap-4 items-start text-sm text-muted py-3">
+                <span class="font-serif text-xl text-accent w-7 leading-none">4</span>
+                Validate requests, handle errors, and test APIs
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills -->
+      <section id="skills" class="relative z-10 px-6 md:px-12 pb-20 md:pb-24">
+        <p class="sec-label flex items-center gap-4 text-sm tracking-[3px] uppercase text-accent mb-12">02 — Technical Skills</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="relative bg-soft border border-line p-7 md:p-9 rounded-2xl transition-colors duration-300">
+            <span class="absolute right-6 top-4 font-serif text-6xl text-accent/10">01</span>
+            <p class="font-sans font-bold text-xs tracking-[2px] uppercase text-accent mb-5">Programming Languages</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="skill">Java</span>
+              <span class="skill">C++</span>
+              <span class="skill">C#</span>
+              <span class="skill">Kotlin</span>
             </div>
           </div>
 
-          <p
-            class="sec-label flex items-center gap-4 font-mono text-[20px] text-opacity-70 tracking-[3px] uppercase text-lavender mb-6"
-          >
-            How I Work
-          </p>
-          <ul class="list-none space-y-0 text-[15px]">
-            <li
-              class="flex gap-4 items-start font-mono text-[#f0ecff]/80 py-3 border-b border-[rgba(157,68,192,0.10)]"
-            >
-              <span class="font-serif text-xl text-pink w-7 leading-none"
-                >1</span
-              >Identify keyword opportunities through research tools
-            </li>
-            <li
-              class="flex gap-4 items-start font-mono text-[#f0ecff]/80 py-3 border-b border-[rgba(157,68,192,0.10)]"
-            >
-              <span class="font-serif text-xl text-pink w-7 leading-none"
-                >2</span
-              >Map keywords based on search intent and clusters
-            </li>
-            <li
-              class="flex gap-4 items-start font-mono text-[#f0ecff]/80 py-3 border-b border-[rgba(157,68,192,0.10)]"
-            >
-              <span class="font-serif text-xl text-pink w-7 leading-none"
-                >3</span
-              >Improve technical SEO for crawlability and indexing
-            </li>
-            <li
-              class="flex gap-4 items-start font-mono text-[#f0ecff]/80 py-3 border-b border-[rgba(157,68,192,0.10)]"
-            >
-              <span class="font-serif text-xl text-pink w-7 leading-none"
-                >4</span
-              >Build content strategies aligned with ranking opportunities
-            </li>
-            <li class="flex gap-4 items-start font-mono text-[#f0ecff]/80 py-3">
-              <span class="font-serif text-xl text-pink w-7 leading-none"
-                >5</span
-              >Track performance and continuously improve rankings
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
+          <div class="relative bg-soft border border-line p-7 md:p-9 rounded-2xl transition-colors duration-300">
+            <span class="absolute right-6 top-4 font-serif text-6xl text-accent/10">02</span>
+            <p class="font-sans font-bold text-xs tracking-[2px] uppercase text-accent mb-5">Backend Development</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="skill">Spring Boot</span>
+              <span class="skill">Spring MVC</span>
+              <span class="skill">REST APIs</span>
+              <span class="skill">Spring Security</span>
+            </div>
+          </div>
 
-    <!-- ───────────── PERFORMANCE METRICS SECTION ───────────── -->
-    <section id="performance" class="relative z-10 px-12 pb-24">
-      <!-- Section Label -->
-      <p
-        class="sec-label flex items-center gap-4 font-mono text-[20px] tracking-[3px] uppercase text-lavender mb-12"
-      >
-        Performance
-      </p>
+          <div class="relative bg-soft border border-line p-7 md:p-9 rounded-2xl transition-colors duration-300">
+            <span class="absolute right-6 top-4 font-serif text-6xl text-accent/10">03</span>
+            <p class="font-sans font-bold text-xs tracking-[2px] uppercase text-accent mb-5">Persistence & Databases</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="skill">Spring Data JPA</span>
+              <span class="skill">Hibernate</span>
+              <span class="skill">JDBC</span>
+              <span class="skill">SQL</span>
+              <span class="skill">MySQL</span>
+            </div>
+          </div>
 
-      <!-- Section Title -->
-      <h2
-        class="font-serif leading-tight mb-12"
-        style="font-size: clamp(28px, 4vw, 48px)"
-      >
-        SEO <em class="italic text-lavender">Metrics</em>
-      </h2>
+          <div class="relative bg-soft border border-line p-7 md:p-9 rounded-2xl transition-colors duration-300">
+            <span class="absolute right-6 top-4 font-serif text-6xl text-accent/10">04</span>
+            <p class="font-sans font-bold text-xs tracking-[2px] uppercase text-accent mb-5">Developer Tools</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="skill">Git</span>
+              <span class="skill">GitHub</span>
+              <span class="skill">Maven</span>
+              <span class="skill">Postman</span>
+              <span class="skill">cURL</span>
+              <span class="skill">Android Studio</span>
+            </div>
+          </div>
 
-      <!-- Metric Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
-        <div class="bg-card rounded-lg p-5">
-          <p
-            class="font-mono text-[11px] tracking-widest uppercase text-pink mb-2"
-          >
-            Total Clicks
-          </p>
-          <p class="font-serif text-[36px] leading-none text-[#f0ecff] mb-1">
-            10,969
-          </p>
-          <p class="font-mono text-[10px] text-[#f0ecff]/40">All Clients</p>
-        </div>
-
-        <div class="bg-card rounded-lg p-5">
-          <p
-            class="font-mono text-[11px] tracking-widest uppercase text-pink mb-2"
-          >
-            Total Impressions
-          </p>
-          <p class="font-serif text-[36px] leading-none text-[#f0ecff] mb-1">
-            3.34M
-          </p>
-          <p class="font-mono text-[10px] text-[#f0ecff]/40">All Clients</p>
-        </div>
-
-        <div class="bg-card rounded-lg p-5">
-          <p
-            class="font-mono text-[11px] tracking-widest uppercase text-pink mb-2"
-          >
-            Overall CTR
-          </p>
-          <p class="font-serif text-[36px] leading-none text-lavender mb-1">
-            0.33%
-          </p>
-          <p class="font-mono text-[10px] text-[#f0ecff]/40">
-            Click-through rate
-          </p>
-        </div>
-      </div>
-
-      <!-- Detailed Table -->
-      <div
-        class="border border-[rgba(157,68,192,0.22)] rounded-lg overflow-hidden"
-      >
-        <!-- Table Header -->
-        <div
-          class="grid grid-cols-2 px-5 py-3 border-b border-[rgba(157,68,192,0.22)]"
-        >
-          <span
-            class="font-mono text-[15px] tracking-[2px] uppercase text-[#f0ecff]/40"
-            >Metric</span
-          >
-          <span
-            class="font-mono text-[15px] tracking-[2px] uppercase text-[#f0ecff]/40 text-right"
-            >Value</span
-          >
-        </div>
-
-        <!-- Row 1 -->
-        <div
-          class="grid grid-cols-2 items-center px-5 py-4 border-b border-[rgba(157,68,192,0.12)]"
-        >
-          <span class="font-mono text-[15px] text-[#f0ecff]">
-            Total Clicks
-            <span class="text-[#f0ecff]/40 text-[11px]">(All Clients)</span>
-          </span>
-          <span class="font-serif text-[20px] text-pink text-right"
-            >10,969</span
-          >
-        </div>
-
-        <!-- Row 2 -->
-        <div
-          class="grid grid-cols-2 items-center px-5 py-4 border-b border-[rgba(157,68,192,0.12)]"
-        >
-          <span class="font-mono text-[15px] text-[#f0ecff]">
-            Total Impressions
-            <span class="text-[#f0ecff]/40 text-[11px]">(All Clients)</span>
-          </span>
-          <span class="font-serif text-[20px] text-pink text-right"
-            >3,344,700</span
-          >
-        </div>
-
-        <!-- Row 3 -->
-        <div class="grid grid-cols-2 items-center px-5 py-4">
-          <span class="font-mono text-[15px] text-[#f0ecff]">Overall CTR</span>
-          <span class="font-serif text-[20px] text-lavender text-right"
-            >0.33%</span
-          >
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────── SKILLS ───────────── -->
-    <section id="skills" class="relative z-10 px-12 pb-24">
-      <p
-        class="sec-label flex items-center gap-4 font-mono text-[20px] text-opacity-70 tracking-[3px] uppercase text-lavender mb-12"
-      >
-        02 — Skills
-      </p>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-        <!-- SEO -->
-        <div
-          class="relative bg-card hover:bg-card2 transition-colors p-9 overflow-hidden group rounded-3xl"
-        >
-          <span
-            class="absolute right-6 top-5 font-serif text-[72px] text-lavender/5 leading-none pointer-events-none select-none"
-            >01</span
-          >
-          <p
-            class="font-sans font-bold text-[12px] tracking-[2px] uppercase text-lavender mb-5"
-          >
-            SEO &amp; Optimization
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Technical SEO</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >On-Page SEO</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Off-Page SEO</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >SEO Audits</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Keyword Research</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Keyword Gap Analysis</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Backlink Strategy</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Internal Linking</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Meta Tag Optimization</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Site Architecture</span
-            >
+          <div class="relative bg-soft border border-line p-7 md:p-9 rounded-2xl md:col-span-2 transition-colors duration-300">
+            <p class="font-sans font-bold text-xs tracking-[2px] uppercase text-accent mb-5">Application Development</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="skill">Android UI Components</span>
+              <span class="skill">RecyclerView</span>
+              <span class="skill">ViewPager</span>
+              <span class="skill">Content Providers</span>
+              <span class="skill">EXIF Metadata</span>
+              <span class="skill">Unity Engine</span>
+            </div>
           </div>
         </div>
+      </section>
 
-        <!-- Tools -->
-        <div
-          class="relative bg-card hover:bg-card2 transition-colors p-9 overflow-hidden rounded-3xl"
-        >
-          <span
-            class="absolute right-6 top-5 font-serif text-[72px] text-lavender/5 leading-none pointer-events-none select-none"
-            >02</span
-          >
-          <p
-            class="font-sans font-bold text-[12px] tracking-[2px] uppercase text-lavender mb-5"
-          >
-            Tools &amp; Platforms
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Google Analytics</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Search Console</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Semrush</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Surfer SEO</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Screaming Frog</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >WordPress</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Ahrefs</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Canva</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Notion</span
-            >
+      <!-- Experience -->
+      <section id="experience" class="relative z-10 px-6 md:px-12 pb-20 md:pb-24">
+        <p class="sec-label flex items-center gap-4 text-sm tracking-[3px] uppercase text-accent mb-12">03 — Experience</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-6 md:gap-12 py-10 border-t border-line">
+          <div class="text-xs leading-loose text-muted">
+            <div class="font-sans font-bold text-xl text-accent mb-1">Gamebee Studio</div>
+            <div>Game Development Intern</div>
+            <div>2 months</div>
+          </div>
+
+          <div>
+            <h3 class="font-serif text-3xl mb-4">
+              Game Development <em class="italic text-accent">Intern</em>
+            </h3>
+
+            <ul class="list-none text-[13px] text-muted">
+              <li class="flex gap-3 py-3 border-b border-dashed border-line">
+                <span class="text-accent">→</span>
+                Supported game development tasks using the Unity Engine.
+              </li>
+              <li class="flex gap-3 py-3 border-b border-dashed border-line">
+                <span class="text-accent">→</span>
+                Implemented and tested game features as part of the development workflow.
+              </li>
+              <li class="flex gap-3 py-3">
+                <span class="text-accent">→</span>
+                Collaborated with team members to debug issues and refine game functionality.
+              </li>
+            </ul>
           </div>
         </div>
+      </section>
 
-        <!-- Automation -->
-        <div
-          class="relative bg-card hover:bg-card2 transition-colors p-9 overflow-hidden rounded-3xl"
-        >
-          <span
-            class="absolute right-6 top-5 font-serif text-[72px] text-lavender/5 leading-none pointer-events-none select-none"
-            >03</span
-          >
-          <p
-            class="font-sans font-bold text-[12px] tracking-[2px] uppercase text-lavender mb-5"
-          >
-            Automation &amp; AI
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >n8n Workflow Automation</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >SEO Data Tracking</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Prompt Engineering</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >AI Tools for SEO</span
-            >
+      <!-- Projects -->
+      <section id="projects" class="relative z-10 px-6 md:px-12 pb-20 md:pb-24">
+        <p class="sec-label flex items-center gap-4 text-sm tracking-[3px] uppercase text-accent mb-12">04 — Projects</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <article class="project-card">
+            <div class="project-number">01</div>
+            <p class="project-type">Java · Spring Boot · MySQL</p>
+            <h3 class="font-sans font-bold text-lg mb-3">Library Management REST API</h3>
+            <ul>
+              <li>Developed REST endpoints to create, retrieve, update, and delete library book records.</li>
+              <li>Integrated Spring Data JPA and Hibernate with MySQL.</li>
+              <li>Added request validation and exception handling for API errors.</li>
+              <li>Tested API requests and responses using Postman.</li>
+            </ul>
+          </article>
+
+          <article class="project-card">
+            <div class="project-number">02</div>
+            <p class="project-type">Java · Spring Boot · SQL</p>
+            <h3 class="font-sans font-bold text-lg mb-3">Task Tracker API</h3>
+            <ul>
+              <li>Built a backend API for task management with core CRUD operations.</li>
+              <li>Practiced separating request handling and business logic through controller and service layers.</li>
+              <li>Integrated a database to store and manage task records.</li>
+            </ul>
+          </article>
+
+          <article class="project-card">
+            <div class="project-number">03</div>
+            <p class="project-type">Kotlin · Android</p>
+            <h3 class="font-sans font-bold text-lg mb-3">Digital Asset Management App</h3>
+            <ul>
+              <li>Implemented a custom RecyclerView grid using multiple ViewHolder types.</li>
+              <li>Used bottom navigation, ViewPager, and bottom-dialog interactions.</li>
+              <li>Accessed device storage with Content Providers and read image metadata through EXIF interfaces.</li>
+              <li>Explored inter-app information sharing.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section id="education" class="relative z-10 px-6 md:px-12 pb-20 md:pb-24">
+        <p class="sec-label flex items-center gap-4 text-sm tracking-[3px] uppercase text-accent mb-12">05 — Education</p>
+
+        <div class="border-t border-line py-8 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-4 md:gap-12">
+          <div class="text-xs tracking-widest uppercase text-muted">Degree</div>
+          <div>
+            <h3 class="font-serif text-3xl mb-2">
+              Bachelor of Computer Applications
+              <em class="italic text-accent">(BCA)</em>
+            </h3>
+            <p class="text-sm text-muted">Tilak Maharashtra Vidyapeeth</p>
           </div>
         </div>
+      </section>
 
-        <!-- Marketing -->
-        <div
-          class="relative bg-card hover:bg-card2 transition-colors p-9 overflow-hidden rounded-3xl"
-        >
-          <span
-            class="absolute right-6 top-5 font-serif text-[72px] text-lavender/5 leading-none pointer-events-none select-none"
-            >04</span
-          >
-          <p
-            class="font-sans font-bold text-[12px] tracking-[2px] uppercase text-lavender mb-5"
-          >
-            Marketing &amp; Content
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Blog Writing</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Content Marketing</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Guest Posting</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Social Media Campaigns</span
-            >
-            <span
-              class="font-mono text-[11px] px-3 py-1 bg-purple/15 border border-purple/30 rounded-sm"
-              >Digital Marketing Strategy</span
-            >
+      <!-- Contact -->
+      <section id="contact" class="relative z-10 px-6 md:px-12 pb-24">
+        <p class="sec-label flex items-center gap-4 text-sm tracking-[3px] uppercase text-accent mb-12">06 — Contact</p>
+
+        <h2 class="font-serif leading-tight" style="font-size: clamp(36px, 5vw, 64px)">
+          Let's<br />
+          <em class="italic text-accent">Connect</em>
+        </h2>
+
+        <p class="text-[12px] text-muted mt-4 mb-8 max-w-md leading-loose">
+          Interested in software engineering, Java backend development, and
+          opportunities to build reliable applications.
+        </p>
+
+        <div class="max-w-2xl">
+          <a href="mailto:bijaymohanty165@gmail.com" class="contact-link">
+            <span>Email</span>
+            <strong>bijaymohanty165@gmail.com ↗</strong>
+          </a>
+          <a href="tel:8118035765" class="contact-link">
+            <span>Phone</span>
+            <strong>8118035765 ↗</strong>
+          </a>
+          <div class="contact-link">
+            <span>LinkedIn</span>
+            <strong>Add LinkedIn profile URL</strong>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
-    <!-- ───────────── EXPERIENCE ───────────── -->
-    <section id="experience" class="relative z-10 px-12 pb-24">
-      <p
-        class="sec-label flex items-center gap-4 font-mono text-[20px] text-opacity-70 tracking-[3px] uppercase text-lavender mb-12"
-      >
-        03 — Experience
-      </p>
-
-      <!-- Content Whale -->
-      <div
-        class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-12 py-12 border-t border-[rgba(157,68,192,0.22)]"
-      >
-        <div class="font-mono text-[11px] leading-loose text-[#f0ecff]/50">
-          <div class="font-sans font-bold text-[20px] text-pink mb-1">
-            Content Whale
-          </div>
-          <div>SEO Executive Intern</div>
-          <div>Dec 2025 – Present</div>
-        </div>
-        <div>
-          <h3 class="font-serif text-[28px] leading-tight mb-4">
-            SEO Executive <em class="italic text-lavender">Intern</em>
-          </h3>
-          <ul class="list-none space-y-0">
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Worked on multiple client
-              projects contributing to 300%+ organic traffic growth
-            </li>
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Created SEO mastersheets,
-              keyword clusters, and content calendars
-            </li>
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Planned SEO blog
-              strategies based on search intent
-            </li>
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Conducted SEO audits to
-              improve crawlability and rankings
-            </li>
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Implemented on-page,
-              content, and technical SEO strategies
-            </li>
-            <li class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2">
-              <span class="text-pink shrink-0">→</span>Managing SEO strategies
-              across multiple client accounts simultaneously
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Arthlete Fit -->
-      <div
-        class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-12 py-12 border-t border-[rgba(157,68,192,0.22)]"
-      >
-        <div class="font-mono text-[11px] leading-loose text-[#f0ecff]/50">
-          <div class="font-sans font-bold text-[20px] text-pink mb-1">
-            Arthlete Fit
-          </div>
-          <div>SEO Analyst</div>
-          <div>Jul 2025 – Present</div>
-        </div>
-        <div>
-          <h3 class="font-serif text-[28px] leading-tight mb-4">
-            SEO <em class="italic text-lavender">Analyst</em>
-          </h3>
-          <ul class="list-none space-y-0">
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Led on-page SEO including
-              meta tags, internal linking, and site structure
-            </li>
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Improved site
-              performance, crawlability, and Core Web Vitals
-            </li>
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Developed blog and
-              backlink strategies to grow organic traffic
-            </li>
-            <li class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2">
-              <span class="text-pink shrink-0">→</span>Building SEO foundations
-              for early-stage startups
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Testriq -->
-      <div
-        class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-12 py-12 border-t border-[rgba(157,68,192,0.22)]"
-      >
-        <div class="font-mono text-[11px] leading-loose text-[#f0ecff]/50">
-          <div class="font-sans font-bold text-[20px] text-pink mb-1">
-            Testriq QA Lab LLP
-          </div>
-          <div>SEO Analyst</div>
-          <div>Jul 2025 – Sep 2025</div>
-        </div>
-        <div>
-          <h3 class="font-serif text-[28px] leading-tight mb-4">
-            SEO <em class="italic text-lavender">Analyst</em>
-          </h3>
-          <ul class="list-none space-y-0">
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Managed on-page and
-              off-page SEO for service pages
-            </li>
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Conducted SEO audits and
-              optimized meta tags and internal links
-            </li>
-            <li class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2">
-              <span class="text-pink shrink-0">→</span>Achieved 100/100 SEO and
-              PageSpeed Insights score through technical optimization
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- College -->
-      <div
-        class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-12 py-12 border-t border-[rgba(157,68,192,0.22)]"
-      >
-        <div class="font-mono text-[11px] leading-loose text-[#f0ecff]/50">
-          <div class="font-sans font-bold text-[20px] text-pink mb-1">
-            Guru Nanak Khalsa College
-          </div>
-          <div>Social Media Marketer</div>
-          <div>Apr 2025 – Oct 2025</div>
-        </div>
-        <div>
-          <h3 class="font-serif text-[28px] leading-tight mb-4">
-            Social Media <em class="italic text-lavender">Marketer</em>
-          </h3>
-          <ul class="list-none space-y-0">
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Managed digital promotion
-              for student campaigns via Instagram and WhatsApp
-            </li>
-            <li class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2">
-              <span class="text-pink shrink-0">→</span>Improved engagement and
-              participation through targeted content
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- NGO -->
-      <div
-        class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-12 py-12 border-t border-[rgba(157,68,192,0.22)]"
-      >
-        <div class="font-mono text-[11px] leading-loose text-[#f0ecff]/50">
-          <div class="font-sans font-bold text-[20px] text-pink mb-1">
-            Hamari Pahchaan NGO
-          </div>
-          <div>Social Entrepreneur</div>
-          <div>May 2025 – Jul 2025</div>
-        </div>
-        <div>
-          <h3 class="font-serif text-[28px] leading-tight mb-4">
-            Social <em class="italic text-lavender">Entrepreneur</em>
-          </h3>
-          <ul class="list-none space-y-0">
-            <li
-              class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2 border-b border-dashed border-lavender/10"
-            >
-              <span class="text-pink shrink-0">→</span>Worked on social media
-              campaigns supporting fundraising initiatives
-            </li>
-            <li class="flex gap-3 font-mono text-[12px] text-[#f0ecff]/50 py-2">
-              <span class="text-pink shrink-0">→</span>Focused on education and
-              women's safety causes
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────── PROJECTS ───────────── -->
-    <section id="projects" class="relative z-10 px-12 pb-24">
-      <p
-        class="sec-label flex items-center gap-4 font-mono text-[20px] text-opacity-70 tracking-[3px] uppercase text-lavender mb-12"
-      >
-        04 — Projects
-      </p>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-        <div
-          class="group bg-card hover:bg-purple transition-colors p-9 cursor-default"
-        >
-          <div
-            class="font-serif text-[64px] text-purple/15 leading-none mb-6 group-hover:text-white/5 transition-colors"
-          >
-            01
-          </div>
-          <p
-            class="font-mono text-[15px] tracking-[2px] uppercase text-lavender mb-2 group-hover:text-pink transition-colors"
-          >
-            Live SEO Environment
-          </p>
-          <h4 class="font-sans font-bold text-base mb-3">Digital BoostHub</h4>
-          <p
-            class="font-mono text-[11px] leading-loose text-[#f0ecff]/50 group-hover:text-[#f0ecff]/80 transition-colors"
-          >
-            Personal portfolio website created to apply SEO techniques in a live
-            environment — on-page optimization, internal linking, indexing, and
-            content structure.
-          </p>
-        </div>
-
-        <div
-          class="group bg-card hover:bg-purple transition-colors p-9 cursor-default"
-        >
-          <div
-            class="font-serif text-[64px] text-purple/15 leading-none mb-6 group-hover:text-white/5 transition-colors"
-          >
-            02
-          </div>
-          <p
-            class="font-mono text-[15px] tracking-[2px] uppercase text-lavender mb-2 group-hover:text-pink transition-colors"
-          >
-            Full Strategy
-          </p>
-          <h4 class="font-sans font-bold text-base mb-3">
-            SEO Strategy Demo — ConvertEdge Tech
-          </h4>
-          <p
-            class="font-mono text-[11px] leading-loose text-[#f0ecff]/50 group-hover:text-[#f0ecff]/80 transition-colors"
-          >
-            Developed a complete SEO strategy: website audit, keyword mapping,
-            AEO / GEO strategy, and blog content execution framework.
-          </p>
-        </div>
-
-        <div
-          class="group bg-card hover:bg-purple transition-colors p-9 cursor-default"
-        >
-          <div
-            class="font-serif text-[64px] text-purple/15 leading-none mb-6 group-hover:text-white/5 transition-colors"
-          >
-            03
-          </div>
-          <p
-            class="font-mono text-[15px] tracking-[2px] uppercase text-lavender mb-2 group-hover:text-pink transition-colors"
-          >
-            n8n Automation
-          </p>
-          <h4 class="font-sans font-bold text-base mb-3">
-            Keyword Geo Ranking Checker
-          </h4>
-          <p
-            class="font-mono text-[11px] leading-loose text-[#f0ecff]/50 group-hover:text-[#f0ecff]/80 transition-colors"
-          >
-            Automation workflow that checks whether target keywords rank in
-            specific geographic locations, reducing manual tracking overhead.
-          </p>
-        </div>
-
-        <div
-          class="group bg-card hover:bg-purple transition-colors p-9 cursor-default"
-        >
-          <div
-            class="font-serif text-[64px] text-purple/15 leading-none mb-6 group-hover:text-white/5 transition-colors"
-          >
-            04
-          </div>
-          <p
-            class="font-mono text-[15px] tracking-[2px] uppercase text-lavender mb-2 group-hover:text-pink transition-colors"
-          >
-            n8n Automation
-          </p>
-          <h4 class="font-sans font-bold text-base mb-3">
-            Website Index Status Checker
-          </h4>
-          <p
-            class="font-mono text-[11px] leading-loose text-[#f0ecff]/50 group-hover:text-[#f0ecff]/80 transition-colors"
-          >
-            Automation workflow that verifies whether URLs are indexed in search
-            engines and outputs the indexing status automatically.
-          </p>
-        </div>
-
-        <div
-          class="group bg-card hover:bg-purple transition-colors p-9 cursor-default"
-        >
-          <div
-            class="font-serif text-[64px] text-purple/15 leading-none mb-6 group-hover:text-white/5 transition-colors"
-          >
-            05
-          </div>
-          <p
-            class="font-mono text-[15px] tracking-[2px] uppercase text-lavender mb-2 group-hover:text-pink transition-colors"
-          >
-            ML Application
-          </p>
-          <h4 class="font-sans font-bold text-base mb-3">JOBFIT AI</h4>
-          <p
-            class="font-mono text-[11px] leading-loose text-[#f0ecff]/50 group-hover:text-[#f0ecff]/80 transition-colors"
-          >
-            Streamlit web application that ranks candidates based on resume-job
-            description similarity using NLP and machine learning techniques.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────── CONTACT ───────────── -->
-    <section id="contact" class="relative z-10 px-12 pb-24">
-      <p
-        class="sec-label flex items-center gap-4 font-mono text-[20px] text-opacity-70 tracking-[3px] uppercase text-lavender mb-12"
-      >
-        05 — Contact
-      </p>
-
-      <h2
-        class="font-serif leading-tight mb-0"
-        style="font-size: clamp(36px, 5vw, 64px)"
-      >
-        Let's<br /><em class="italic text-lavender">Connect</em>
-      </h2>
-      <p
-        class="font-mono text-[12px] text-[#f0ecff]/50 mt-4 mb-12 max-w-md leading-loose"
-      >
-        Open to full-time SEO roles, freelance projects, and collaborations.
-      </p>
-
-      <div class="max-w-2xl">
-        <a
-          href="mailto:abhishekow25@gmail.com"
-          class="flex items-center gap-6 py-7 border-b border-[rgba(157,68,192,0.22)] no-underline text-inherit group"
-        >
-          <span
-            class="font-mono text-[15px] tracking-[2px] uppercase text-[#f0ecff]/40 w-24"
-            >Email :</span
-          >
-          <span
-            class="font-serif text-[22px] group-hover:text-pink transition-colors"
-            >abhishekow25@gmail.com</span
-          >
-        </a>
-        <a
-          href="tel:+918450958640"
-          class="flex items-center gap-6 py-7 border-b border-[rgba(157,68,192,0.22)] no-underline text-inherit group"
-        >
-          <span
-            class="font-mono text-[15px] tracking-[2px] uppercase text-[#f0ecff]/40 w-24"
-            >Phone :</span
-          >
-          <span
-            class="font-serif text-[22px] group-hover:text-pink transition-colors"
-            >+91 84509 58640</span
-          >
-        </a>
-        <a
-          href="https://linkedin.com/in/abhishek-dubey-27a273340"
-          target="_blank"
-          class="flex items-center gap-6 py-7 border-b border-[rgba(157,68,192,0.22)] no-underline text-inherit group"
-        >
-          <span
-            class="font-mono text-[15px] tracking-[2px] uppercase text-[#f0ecff]/40 w-24"
-            >LinkedIn:</span
-          >
-          <span
-            class="font-serif text-[22px] group-hover:text-pink transition-colors"
-            >abhishek-dubey-27a273340</span
-          >
-        </a>
-        <div
-          class="flex items-center gap-6 py-7 border-b border-[rgba(157,68,192,0.22)]"
-        >
-          <span
-            class="font-mono text-[15px] tracking-[2px] uppercase text-[#f0ecff]/40 w-24"
-            >Location:</span
-          >
-          <span class="font-serif text-[22px]">Thane, Maharashtra, India</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────── FOOTER ───────────── -->
+    <!-- Footer (stays dark in both themes) -->
     <footer
-      class="bg-deep-blue px-12 py-1 flex flex-col md:flex-row justify-between items-end gap-2"
+      class="relative z-10 bg-footer text-white px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-5 transition-colors duration-300"
     >
       <div>
-        <div class="font-serif text-[30px] leading-tight text-[#f0ecff]">
-          Abhishek<br /><em class="italic text-pink">T. Dubey</em>
+        <div class="font-serif text-3xl leading-tight">
+          Bijay<br />
+          <em class="italic text-violet-300">Mohanty</em>
         </div>
-        <p class="font-mono text-[11px] text-[#f0ecff]/35 mt-2 leading-loose">
-          SEO Executive · Technical SEO · Organic Growth Strategy
-        </p>
+        <p class="text-[11px] text-white/55 mt-3 leading-loose">Software Engineer · Java Backend Developer</p>
       </div>
-      <div
-        class="text-right font-mono text-[11px] text-[#f0ecff]/40 leading-loose"
-      >
-        <p>© 2026 Abhishek Dubey</p>
-        <p>Thane, Maharashtra</p>
+
+      <div class="md:text-right text-[11px] text-white/55 leading-loose">
+        <p>© 2026 Bijay Mohanty</p>
+        <p>Built around backend engineering and application development</p>
       </div>
     </footer>
 
     <script>
-      // Smooth scroll
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeIcon = document.getElementById("theme-icon");
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+
+      const SUN = `<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>`;
+      const MOON = `<path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/>`;
+
+      // Sync icon, label and browser UI color with the current theme
+      function syncUI() {
+        const isDark = document.documentElement.classList.contains("dark");
+        themeIcon.innerHTML = isDark ? SUN : MOON; // sun = "switch to light", moon = "switch to dark"
+        themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+        if (themeMeta) themeMeta.setAttribute("content", isDark ? "#111014" : "#ffffff");
+      }
+
+      function setTheme(theme) {
+        document.documentElement.classList.toggle("dark", theme === "dark");
+        try { localStorage.setItem("theme", theme); } catch (e) {}
+        syncUI();
+      }
+
+      syncUI();
+
+      themeToggle.addEventListener("click", () => {
+        setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+      });
+
+      // Follow the OS setting only if the visitor hasn't picked a theme manually
+      if (window.matchMedia) {
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+          let saved = null;
+          try { saved = localStorage.getItem("theme"); } catch (err) {}
+          if (!saved) {
+            document.documentElement.classList.toggle("dark", e.matches);
+            syncUI();
+          }
+        });
+      }
+
+      // Smooth scrolling for navigation links
       document.querySelectorAll('a[href^="#"]').forEach((a) => {
         a.addEventListener("click", (e) => {
-          const t = document.querySelector(a.getAttribute("href"));
-          if (t) {
+          const target = document.querySelector(a.getAttribute("href"));
+          if (target) {
             e.preventDefault();
-            t.scrollIntoView({ behavior: "smooth" });
+            target.scrollIntoView({ behavior: "smooth" });
           }
         });
       });
 
-      // Scroll-triggered fade-in
-      const obs = new IntersectionObserver(
+      // Reveal cards and sections as they enter the viewport
+      const observer = new IntersectionObserver(
         (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.style.opacity = "1";
-              e.target.style.transform = "translateY(0)";
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = "1";
+              entry.target.style.transform = "translateY(0)";
+              observer.unobserve(entry.target);
             }
           });
         },
@@ -1060,16 +640,13 @@
       );
 
       document
-        .querySelectorAll(
-          '.group, [class*="grid-cols-1"] > div, [class*="border-t"]',
-        )
+        .querySelectorAll(".project-card, #experience .border-t, #education .border-t")
         .forEach((el) => {
           el.style.opacity = "0";
-          el.style.transform = "translateY(20px)";
-          el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-          obs.observe(el);
+          el.style.transform = "translateY(18px)";
+          el.style.transition = "opacity .6s ease, transform .6s ease";
+          observer.observe(el);
         });
     </script>
   </body>
-  
 </html>
